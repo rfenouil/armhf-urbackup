@@ -1,8 +1,6 @@
 # Base system is the Raspian ARM image from Resin
 FROM   resin/rpi-raspbian
 
-MAINTAINER d3fault <14540322+n3PH1lim@users.noreply.github.com>
-
 RUN [ "cross-build-start" ]
 
 # Make sure we don't get notifications we can't answer during building.
@@ -25,18 +23,16 @@ RUN    echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-se
        echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections  && \
        apt-get --yes install curl oracle-java8-installer ; apt-get clean
 
-RUN \
-	mkdir -p /opt/JDownloader/ &&\
-	wget -O /opt/JDownloader/JDownloader.jar http://installer.jdownloader.org/JDownloader.jar &&\
-	java -Djava.awt.headless=true -jar /opt/JDownloader/JDownloader.jar
+
+# Load in all of our config files.
+ADD    ./scripts/start /start
 
 
-COPY startJD2.sh /opt/JDownloader/
-RUN chmod +x /opt/JDownloader/startJD2.sh
+# Fix all permissions
+RUN    chmod +x /start
 
 
-# Run this when the container is started
-CMD /opt/JDownloader/startJD2.sh
-
+# 25565 is for minecraft
+EXPOSE 25565
 
 RUN [ "cross-build-end" ]
