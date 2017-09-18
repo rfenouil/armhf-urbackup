@@ -25,7 +25,8 @@ RUN    echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-se
 
 
 # Load in all of our config files.
-ADD    ./scripts/start /start
+
+COPY  /start /start
 
 
 # Fix all permissions
