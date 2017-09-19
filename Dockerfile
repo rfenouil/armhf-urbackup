@@ -30,7 +30,7 @@ COPY  /start /start
 
 
 # Fix all permissions
-RUN    chmod +x /start
+RUN   chmod +x /start
 
 
 # 25565 is for minecraft
