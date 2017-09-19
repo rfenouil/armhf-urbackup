@@ -32,6 +32,7 @@ COPY  /start /start
 # Fix all permissions
 RUN   chmod +x /start
 
+CMD /start
 
 # 25565 is for minecraft
 EXPOSE 25565
