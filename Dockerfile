@@ -31,6 +31,6 @@ RUN mkdir /data && \
 	# download server
     curl "https://s3.amazonaws.com/Minecraft.Download/versions/1.12.2/minecraft_server.1.12.2.jar" -o /data/minecraft_server.jar
 
-CMD [ "java -Xmx512m -jar /data/minecraft_server.jar nogui" ]
+CMD java -Xmx512m -jar /data/minecraft_server.jar nogui
 
 RUN [ "cross-build-end" ]
