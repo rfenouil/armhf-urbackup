@@ -25,12 +25,12 @@ RUN echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | te
 	rm -rf /var/lib/apt/lists/*
 
 # Download latest Minecraft Server
-RUN mkdir /minecraft-server && \
-    curl "https://s3.amazonaws.com/Minecraft.Download/versions/1.12.2/minecraft_server.1.12.2.jar" -o /minecraft-server/minecraft_server.jar
+RUN mkdir /minecraft-server 
 
-CMD cd /data/ && \
-    echo "eula=true" > /data/eula.txt && \
-    java -Xmx512m -jar /minecraft-server/minecraft_server.jar nogui
+COPY start_minecraft.sh /opt/
 
+RUN echo "eula=true" > /data/eula.txt && chmod +x /opt/start_minecraft.sh
+
+CMD [ "/opt/start_minecraft.sh" ]
 
 RUN [ "cross-build-end" ]
