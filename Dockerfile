@@ -22,7 +22,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Download UrBasckup package and install
-RUN wget https://www.urbackup.org/downloads/Server/2.1.20/urbackup-server_2.1.20_armhf.deb && \
+RUN wget https://www.urbackup.org/downloads/Server/2.1.20/urbackup-server_2.1.20_armhf.deb -O download && \
     dpkg -i download && \
     rm download
 
