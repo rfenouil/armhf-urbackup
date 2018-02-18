@@ -3,34 +3,51 @@ FROM   resin/rpi-raspbian
 
 RUN [ "cross-build-start" ]
 
-# 25565 is for minecraft
-EXPOSE 25565
+# Default port of UrBackup server
+EXPOSE 55413
+EXPOSE 55414
+EXPOSE 55415
+EXPOSE 35623
 
 # Make sure we don't get notifications we can't answer during building.
 ENV    DEBIAN_FRONTEND noninteractive
 
-# Install Java 8 & curl
-RUN echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee /etc/apt/sources.list.d/webupd8team-java.list && \
-    echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee -a /etc/apt/sources.list.d/webupd8team-java.list && \
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886 && \
-    echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections  && \
-    echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections  && \
-	apt-get --yes update && \
-    apt-get --yes install \
-    #software-properties-common \
-	curl \
-	oracle-java8-installer && \
-	# CLEANUP
-	apt-get clean && \
-	rm -rf /var/lib/apt/lists/*
+# Prepare UrBackup dependencies
+RUN apt-get update && \
+    apt-get install -y  wget \
+                        lsb-release \
+                        sqlite3 \
+                        libcurl3 \
+                        libfuse2 && \
+    rm -rf /var/lib/apt/lists/*
 
-# Download latest Minecraft Server
-RUN mkdir /minecraft-server 
+# Download UrBasckup package and install
+RUN wget https://www.urbackup.org/downloads/Server/2.1.20/urbackup-server_2.1.20_armhf.deb && \
+    dpkg -i download && \
+    rm download
 
-COPY start_minecraft.sh /opt/
+# Mount root folder for backups
+VOLUME /media/BACKUP/
 
-RUN echo "eula=true" > /data/eula.txt && chmod +x /opt/start_minecraft.sh
+# Mount folder for log file
+VOLUME /var/log/
 
-CMD [ "/opt/start_minecraft.sh" ]
+# Mount config folder. If empty, default files will be created.
+# Keeping this folder separate allows to migrate the server with complaints by the clients
+VOLUME /var/urbackup/
+
+# If set up, used for backup temp files
+VOLUME /tmp/
+
+# Default port of UrBackup server
+EXPOSE 55413
+EXPOSE 55414
+EXPOSE 55415
+EXPOSE 35623
+
+ENTRYPOINT ["/usr/bin/urbackupsrv"]
+
+# Default operation is run, adding -u root solves permission issues with mounted volumes
+CMD ["run", "-u root"]
 
 RUN [ "cross-build-end" ]
