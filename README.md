@@ -20,6 +20,8 @@ Should be started with --privileged to get btrfs support.
 
 Tested on Rock64 running OMV (linux 4.4.167-1169-rockchip-ayufan-g3cde5c624c9c).
 
+Web server listens on port 55414.
+
 Command line run example:
 
 docker run -d \
