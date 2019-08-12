@@ -1,7 +1,5 @@
 # Base system is the Raspian ARM image from Resin
-FROM   resin/rpi-raspbian
-
-RUN [ "cross-build-start" ]
+FROM balenalib/rpi-raspbian:stretch   
 
 # Default port of UrBackup server
 EXPOSE 55413
@@ -15,11 +13,14 @@ ENV    DEBIAN_FRONTEND noninteractive
 # Prepare UrBackup dependencies
 RUN apt-get update && \
     apt-get install -y  btrfs-tools \
-                        wget \
+                        libcrypto++-dev \
+                        libcurl3-nss \
+                        libfuse2 \
+                        libnspr4 \
+                        libnss3 \
                         lsb-release \
                         sqlite3 \
-                        libcurl3 \
-                        libfuse2 && \
+                        wget && \
     rm -rf /var/lib/apt/lists/*
 
 # Download UrBasckup package and install
@@ -28,8 +29,11 @@ RUN wget https://hndl.urbackup.org/Server/${VERSION_URBACKUP}/urbackup-server_${
     dpkg -i download && \
     rm download
 
+# Set the backup folder path in default config file
+RUN echo  "/URBACKUP_FOLDER" > /etc/urbackup/backupfolder
+
 # Mount root folder for backups
-VOLUME /media/BACKUP/
+VOLUME /URBACKUP_FOLDER
 
 # Mount folder for log file
 VOLUME /var/log/
@@ -52,4 +56,4 @@ ENTRYPOINT ["/usr/bin/urbackupsrv"]
 # Default operation is run, adding -u root solves permission issues with mounted volumes
 CMD ["run", "-u root"]
 
-RUN [ "cross-build-end" ]
+
