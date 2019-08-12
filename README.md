@@ -8,7 +8,13 @@ Dockerfile modifications:
 - Added btrfs-tools
 
 Image must be compiled and run on the arm Device (or pulled from DockerHub).
-BTRFS filesystem recommended for backup volume. Check logs after starting container, urBackup tests for snapshots and subvolumes ability on startup.
+
+BTRFS filesystem recommended for backup volume.  
+Check logs after starting container, urBackup tests for snapshots and subvolumes ability on startup.
+
+Using BTRFS, if you need to remove something in the backup folder (BE CAREFUL, it contains backups !!!), you might need the command:  
+`btrfs subvolume delete filename`  
+Because urBackup uses subvolumes on BTRFS.
 
 Should be started with --privileged to get btrfs support.
 
