@@ -1,4 +1,3 @@
-# Base system is the Raspian ARM image from Resin
 FROM balenalib/rpi-raspbian:stretch   
 
 # Default port of UrBackup server
@@ -7,7 +6,7 @@ EXPOSE 55414
 EXPOSE 55415
 EXPOSE 35623
 
-# Make sure we don't get notifications we can't answer during building.
+# Make sure we don't get notifications we can't answer during building
 ENV    DEBIAN_FRONTEND noninteractive
 
 # Prepare UrBackup dependencies
@@ -23,7 +22,7 @@ RUN apt-get update && \
                         wget && \
     rm -rf /var/lib/apt/lists/*
 
-# Download UrBasckup package and install
+# Download UrBackup package and install
 ENV VERSION_URBACKUP 2.3.8
 RUN wget https://hndl.urbackup.org/Server/${VERSION_URBACKUP}/urbackup-server_${VERSION_URBACKUP}_armhf.deb -O download && \
     dpkg -i download && \
