@@ -14,7 +14,8 @@ ENV    DEBIAN_FRONTEND noninteractive
 
 # Prepare UrBackup dependencies
 RUN apt-get update && \
-    apt-get install -y  wget \
+    apt-get install -y  btrfs-tools \
+                        wget \
                         lsb-release \
                         sqlite3 \
                         libcurl3 \
@@ -22,7 +23,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Download UrBasckup package and install
-RUN wget https://www.urbackup.org/downloads/Server/2.1.20/urbackup-server_2.1.20_armhf.deb -O download && \
+ENV VERSION_URBACKUP 2.3.8
+RUN wget https://hndl.urbackup.org/Server/${VERSION_URBACKUP}/urbackup-server_${VERSION_URBACKUP}_armhf.deb -O download && \
     dpkg -i download && \
     rm download
 
