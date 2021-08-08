@@ -1,11 +1,5 @@
 FROM debian
 
-# Default port of UrBackup server
-EXPOSE 55413
-EXPOSE 55414
-EXPOSE 55415
-EXPOSE 35623
-
 # Make sure we don't get notifications we can't answer during building
 ENV    DEBIAN_FRONTEND noninteractive
 
