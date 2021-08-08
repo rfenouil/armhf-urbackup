@@ -1,4 +1,4 @@
-FROM balenalib/rpi-raspbian:stretch   
+FROM debian
 
 # Default port of UrBackup server
 EXPOSE 55413
@@ -14,6 +14,7 @@ RUN apt-get update && \
     apt-get install -y  btrfs-tools \
                         libcrypto++-dev \
                         libcurl3-nss \
+                        libcurl3-gnutls \
                         libfuse2 \
                         libnspr4 \
                         libnss3 \
@@ -23,8 +24,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Download UrBackup package and install
-ENV VERSION_URBACKUP 2.3.8
-RUN wget https://hndl.urbackup.org/Server/${VERSION_URBACKUP}/urbackup-server_${VERSION_URBACKUP}_armhf.deb -O download && \
+ENV VERSION_URBACKUP 2.4.13
+RUN wget https://hndl.urbackup.org/Server/${VERSION_URBACKUP}/urbackup-server_${VERSION_URBACKUP}_arm64.deb -O download && \
     dpkg -i download && \
     rm download
 
@@ -54,5 +55,3 @@ ENTRYPOINT ["/usr/bin/urbackupsrv"]
 
 # Default operation is run, adding -u root solves permission issues with mounted volumes
 CMD ["run", "-u root"]
-
-
